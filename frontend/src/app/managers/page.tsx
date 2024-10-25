@@ -4,33 +4,32 @@ import { useEffect, useState } from 'react';
 import Layout from '../../components/Layout';
 import Modal from '../../components/Modal';  // Import Modal component
 import EditForm from '../../components/EditForm';  // Import EditForm component
+import FormManager from '@/components/FormManager';
 
-interface Admin {
+interface Manager {
   _id?: string;  // Use MongoDB _id for identification
   username: string;
-  email: string;
-  nom: string;  // Assuming "nom" is the name
-  srms: string | null;  // SRM association
+  nom:string // 
 }
 
 const Admins = () => {
-  const [admins, setAdmins] = useState<Admin[]>([]);
+  const [managers, setManagers] = useState<Manager[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
-  const [selectedAdmin, setSelectedAdmin] = useState<Admin | null>(null);
+  const [selectedManager, setSelectedManager] = useState<Manager | null>(null);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
   // Fetch admins on component mount
   useEffect(() => {
     const fetchAdmins = async () => {
       try {
-        const response = await fetch('http://localhost:3000/users?type=admin'); // Adjust your endpoint
+        const response = await fetch('http://localhost:3000/users?type=manager'); // Adjust your endpoint
         if (!response.ok) {
           throw new Error('Failed to fetch admins');
         }
         const data = await response.json();
-        setAdmins(data);
+        setManagers(data);
       } catch (err) {
         const error = err as Error;
         setError(error.message);
@@ -44,14 +43,14 @@ const Admins = () => {
 
   // Handle adding a new admin
   const handleAddNew = () => {
-    setSelectedAdmin(null); // Clear selected admin
+    setSelectedManager(null); // Clear selected admin
     setIsEditMode(false);  // Set to "add" mode
     setModalOpen(true);  // Open modal
   };
 
   // Handle editing an existing admin
-  const handleEdit = (admin: Admin) => {
-    setSelectedAdmin(admin);  // Set the admin to be edited
+  const handleEdit = (admin: Manager) => {
+    setSelectedManager(admin);  // Set the admin to be edited
     setIsEditMode(true);  // Set to "edit" mode
     setModalOpen(true);  // Open modal
   };
@@ -59,13 +58,13 @@ const Admins = () => {
   // Close modal and reset the selected admin
   const handleCloseModal = () => {
     setModalOpen(false);  // Close modal
-    setSelectedAdmin(null);  // Reset selected admin
+    setSelectedManager(null);  // Reset selected admin
   };
 
   // Save admin (both add and edit)
-  const handleSave = async (adminData: Admin) => {
+  const handleSave = async (adminData: Manager) => {
     try {
-      const add={...adminData,type:'admin'}
+      const add={...adminData,type:'manager'}
       const response = isEditMode
         ? await fetch(`http://localhost:3000/users/${adminData._id}`, {
             method: 'PUT',  // For updating existing admin
@@ -74,7 +73,7 @@ const Admins = () => {
             },
             body: JSON.stringify(adminData),
           })
-        : await fetch('http://localhost:3000/users/admin', {
+        : await fetch('http://localhost:3000/users/manager', {
             method: 'POST',  // For adding a new admin
             headers: {
               'Content-Type': 'application/json',
@@ -83,16 +82,16 @@ const Admins = () => {
           });
 
       if (!response.ok) {
-        throw new Error('Failed to save admin');
+        throw new Error('Failed to save manager');
       }
 
       if (isEditMode) {
         // Update the list with the modified admin
-        setAdmins(admins.map(admin => (admin._id === adminData._id ? adminData : admin)));
+        setManagers(managers.map(admin => (admin._id === adminData._id ? adminData : admin)));
       } else {
         // Add the newly created admin to the list
         const newAdmin = await response.json();
-        setAdmins([...admins, newAdmin.user]);
+        setManagers([...managers, newAdmin.user]);
       }
     } catch (err) {
       const error = err as Error;
@@ -110,11 +109,11 @@ const Admins = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to delete admin');
+        throw new Error('Failed to delete manager');
       }
 
       // Remove the admin from the list
-      setAdmins(admins.filter(admin => admin._id !== id));
+      setManagers(managers.filter(admin => admin._id !== id));
     } catch (err) {
       const error = err as Error;
       setError(error.message);
@@ -150,19 +149,19 @@ const Admins = () => {
             </tr>
           </thead>
           <tbody>
-            {admins.map((admin) => (
-              <tr key={admin._id} className="border-b">
-                <td className="px-4 py-2 border">{admin.nom}</td>
-                <td className="px-4 py-2 border">{admin.username}</td>
+            {managers.map((manager) => (
+              <tr key={manager._id} className="border-b">
+                <td className="px-4 py-2 border">{manager.nom}</td>
+                <td className="px-4 py-2 border">{manager.username}</td>
                 <td className="px-4 py-2 border">
                   <button
-                    onClick={() => handleEdit(admin)}
+                    onClick={() => handleEdit(manager)}
                     className="text-blue-600 hover:underline"
                   >
                     Edit  
                   </button>
                   <button
-                    onClick={() => handleDelete(admin._id!)}
+                    onClick={() => handleDelete(manager._id!)}
                     className="ml-4 text-red-600 hover:underline"
                   >
                     Delete
@@ -175,10 +174,11 @@ const Admins = () => {
       </div>
       {/* Modal for adding or editing admin */}
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        <EditForm
+        <FormManager
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
-          initialData={selectedAdmin || { username: '', nom: '', email: '', srms: null }}
+          initialData={selectedManager || { username: '',
+            nom:'' }}
           onSave={handleSave}
           isEdit={isEditMode}
         />

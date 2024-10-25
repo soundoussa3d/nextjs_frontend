@@ -30,10 +30,31 @@ const Login = () => {
       }
 
       const data = await response.json();
+      console.log("data",data);
+      const token = data.access_token
+      console.log(token);
       // You can save the token (if any) to localStorage or cookies
-      // localStorage.setItem('token', data.token);
-      console.log(data.toString);
-      router.push('/dashboard'); // Redirect to a dashboard page or home page on successful login
+      if (token) {
+        // Store the JWT token in localStorage
+        localStorage.setItem('token', token);
+        localStorage.setItem('role', data.user.type);
+        localStorage.setItem('userid', data.user._id);  // Only store if token exists
+      } else {
+        console.error('Token is undefined');
+      }
+    
+      console.log(data.role)
+
+      if (data.user.type == 'super-admin') {
+        router.push('/dashboard'); 
+      } 
+      else if (data.user.type == 'admin') {
+        router.push('/regions'); 
+      }
+      else if (data.user.type == 'manager') {
+        router.push('/myregions'); 
+      }
+     // router.push('/dashboard1'); // Redirect to a dashboard page or home page on successful login
     } catch (err) {
       setError('Invalid email or password');
     }
