@@ -32,7 +32,7 @@ const FormManager: React.FC<FormManagerProps> = ({ isOpen, onClose,initialData, 
 
   const handleRegionsChange = (regions: any[]) => {
     // Update selected regions based on RegionSelector's state
-    setFormData((prev) => ({ ...prev, selectedRegions: regions }));
+    setFormData((prev:object) => ({ ...prev, selectedRegions: regions }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {

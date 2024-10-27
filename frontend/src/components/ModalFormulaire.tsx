@@ -22,7 +22,7 @@ const ModalFormulaire: React.FC<ModalFormulaireProps> = ({
   // Handle input field changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev:object) => ({ ...prev, [name]: value }));
   };
 
   return isOpen ? (
@@ -53,7 +53,7 @@ const ModalFormulaire: React.FC<ModalFormulaireProps> = ({
         <ValueInput
           values={formData.nameOfValues}
           onChange={(newValues) =>
-            setFormData((prev) => ({ ...prev, nameOfValues: newValues }))
+            setFormData((prev:object) => ({ ...prev, nameOfValues: newValues }))
           }
         />
 
@@ -61,7 +61,7 @@ const ModalFormulaire: React.FC<ModalFormulaireProps> = ({
         <ValueInput
           values={formData.units}
           onChange={(newUnits) =>
-            setFormData((prev) => ({ ...prev, units: newUnits }))
+            setFormData((prev:object) => ({ ...prev, units: newUnits }))
           }
         />
 

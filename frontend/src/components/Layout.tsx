@@ -1,7 +1,12 @@
 // components/Layout.tsx
+import { ReactNode } from 'react';
 import Sidebar from './Sidebar';
 
-const Layout = ({ children }) => {
+interface LayoutProps {
+  children: ReactNode;
+}
+
+const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="flex">
       {/* Sidebar */}

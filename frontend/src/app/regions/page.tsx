@@ -18,6 +18,7 @@ interface SRM {
   email: string;
   telph: string;
   managerId: string;  // Manager might be null if not assigned
+  admin:string;
 }
 
 const Dashboard = () => {

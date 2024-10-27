@@ -16,7 +16,11 @@ const ModalSrms: React.FC<ModalProps> = ({ isOpen, onClose, onSave, initialData,
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev:object) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFormData({ ...formData, nameOfValue: e.target.value });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -107,7 +111,7 @@ const ModalSrms: React.FC<ModalProps> = ({ isOpen, onClose, onSave, initialData,
             <select
               name="status"
               value={formData.status|| 'inactive'}
-              onChange={handleChange}
+              onChange={handleSelectChange}
               className="border p-2 w-full"
               required
             >

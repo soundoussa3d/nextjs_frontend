@@ -54,6 +54,9 @@ const Login = () => {
       else if (data.user.type == 'manager') {
         router.push('/myregions'); 
       }
+      else if (data.user.type == 'agent') {
+        router.push('/forms'); 
+      }
      // router.push('/dashboard1'); // Redirect to a dashboard page or home page on successful login
     } catch (err) {
       setError('Invalid email or password');

@@ -56,7 +56,12 @@ const Sidebar = () => {
 
         {role === 'agent' && (
           <>
-            {/* Agent specific links */}
+            <Link href="/forms" className="px-4 py-2 rounded hover:bg-gray-700">
+              Forms
+            </Link>
+            <Link href="/form" className="px-4 py-2 rounded hover:bg-gray-700">
+              Form
+            </Link>
             
           </>
         )}
